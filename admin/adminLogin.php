@@ -1,5 +1,15 @@
 <?php
 
+if (isset($_POST["login"])) 
+
+{
+       $email =$_POST["email"];// retrieve or extract
+       $password =$_POST["password"];
+
+    //    echo"email is $email and passoword is $password";
+
+    
+}
 
 
 ?>
