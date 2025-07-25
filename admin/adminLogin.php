@@ -1,17 +1,24 @@
 <?php
+require_once "dbconnect.php";
+if (isset($_POST["login"])) {
+    $email = $_POST["email"];
+    $password = $_POST["password"];
 
-if (isset($_POST["login"])) 
+    $sql = "select * from admin where email=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$email]);
+    $adminInfo = $stmt->fetch();
 
-{
-       $email =$_POST["email"];// retrieve or extract
-       $password =$_POST["password"];
-
-    //    echo"email is $email and passoword is $password";
-
-    
+    if ($adminInfo) {
+        if (password_verify($password, $adminInfo["password"])) {
+            echo "Login successful!";
+        } else {
+            $errorMessage = "Invalid input";
+        }
+    } else {
+        $errorMessage = "Invalid input";
+    }
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -19,40 +26,70 @@ if (isset($_POST["login"]))
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <title>Admin Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0a1d37; /* Navy blue background */
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .login-card {
+            background-color: #ffffff;
+            color: #0a1d37;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-navy {
+            background-color: #0a1d37;
+            color: #fff;
+        }
+
+        .btn-navy:hover {
+            background-color: #0d2a4d;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        .alert-danger {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container-fluid">
+    <div class="container py-5">
         <div class="row">
-            <?php
-            require_once("navbarcopy.php");
-
-
-            ?>      
+            <?php require_once("navbarcopy.php"); ?>
         </div>
 
-
-     <div class="row">
-        <div class="col-md-6 mx-auto py-5">
-        <form action="adminLogin.php" method="post">
-            <div class="mb-3">
-                <label for="" class="form-label">Email</label>
-                <input type="email" class="form-control" name="email">
-
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="login-card">
+                    <h3 class="mb-4 text-center">Admin Login</h3>
+                    <form action="adminLogin.php" method="post">
+                        <?php
+                        if (isset($errorMessage)) {
+                            echo "<p class='alert alert-danger'>$errorMessage</p>";
+                        }
+                        ?>
+                        <div class="mb-3">
+                            <label>Email</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>Password</label>
+                            <input type="password" class="form-control" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-navy w-100" name="login">Login</button>
+                    </form>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="">Password</label>
-                <input type="password" class="form-control" name="password">
-            </div>
-            <button type="submit" class="btn btn-outline-primary"name="login">Login
-
-            </button>
-        </form>
         </div>
-
     </div>
-    
 </body>
 </html>
