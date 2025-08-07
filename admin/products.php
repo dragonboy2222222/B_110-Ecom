@@ -92,7 +92,7 @@
               <?php
               if (isset($categories)) {
                   foreach ($categories as $category) {
-                      echo "<option value={$category['catID']}>{$category['catName']}</option>";
+                      echo "<option value={$category['catId']}>{$category['catName']}</option>";
                   }
               }
               ?>
