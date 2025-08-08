@@ -4,7 +4,7 @@ if(!isset($_SESSION)) {
 }
 require_once("dbconnect.php");
 try {
-    $sql="SELECT p.productID,p.productName,p.price,p.description,p.qty,p.imgPath,c.catName as category from product p, category c WHERE p.category =catId";
+    $sql="SELECT p.productId,p.productName,p.price,p.description,p.qty,p.imgPath,c.catName as category from product p, category c WHERE p.category =catId";
   $stmt = $conn->prepare($sql);
   $conn=$stmt->execute();
   $products=$stmt->fetchAll();
@@ -43,6 +43,7 @@ catch (PDOException $e) {
             echo "<p class='alert alert-success' style='width:500px'>{$_SESSION['message']}</p>";
           unset($_SESSION["message"]); // Clear after showing
           }
+          
                     ?>
 
                     <table class="table table-striped">
@@ -69,8 +70,8 @@ catch (PDOException $e) {
                         <td>$product[qty]</td>
                         <td class='text=wrap'>$product[description]</td>
                         <td><img src=$product[imgPath] style=width:100px;</td>
-                        <td><a href=insert.php class='btn btn-primary rounded pill'>Edit</a></td>
-                        <td><a href=delete.php 'btn btn-danger rounded pill'>Delete</a></td>
+                        <td><a href=editdelete.php?eid=$product[productId] class='btn btn-primary rounded pill'>Edit</a></td>
+                        <td><a href=editdelete.php?did=$product[productId] class='btn btn-danger rounded pill'>Delete</a></td>
 
                         </tr>";
 
